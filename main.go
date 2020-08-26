@@ -1,25 +1,34 @@
 package main
 
 import (
+	"fmt"
 	"math"
 	"math/rand"
+	"reflect"
 	"strconv"
 
-	"github.com/gofiber/fiber"
+	"github.com/gin-gonic/gin"
+	// "net/http"
 )
 
 func main() {
-	app := fiber.New()
+	router := gin.Default()
 
-	app.Post("/sudoku/generate", func(c *fiber.Ctx) {
-		level, err := strconv.Atoi(c.Body())
-
+	router.GET("/sudoku/generate/:level", func(c *gin.Context) {
+		param := c.Param("level")
+		level, err := strconv.Atoi(param)
 		if err != nil {
-			c.Send("Send a number 1 to 10 as request\n1  -> Easiest\n10 -> Hardest")
+			c.JSON(500, gin.H{
+				"Error": "Send a number 1 to 10 as request",
+				"Info":  "1 -> Easiest, 10 -> Hardest",
+				"Message": "Invalid format",
+			})
 		} else if level < 1 || level > 10 {
-			c.Send("You should send a number 1 to 10.")
+			c.JSON(500, gin.H{
+				"Error": "You should send a number 1 to 10",
+				"Info":  "1 -> Easiest, 10 -> Hardest",
+			})
 		} else {
-
 			sequence := make([]int, 18)
 			for i := range sequence {
 				sequence[i] = i%9 + 1
@@ -33,7 +42,6 @@ func main() {
 			}
 
 			for i := 0; i < 25; i++ {
-
 				rand1 := rand.Intn(9) + 1
 				rand2 := rand.Intn(9) + 1
 
@@ -54,30 +62,41 @@ func main() {
 			for i := 0; i < level*10; i++ {
 				sample[rand.Intn(9)][rand.Intn(9)] = 0
 			}
-
-			c.Send(sample)
+			c.JSON(400, gin.H{
+				"result": sample,
+			})
 		}
 
 	})
 
-	app.Post("/sudoku/validate", func(c *fiber.Ctx) {
-		req := new([][]int)
-		if err := c.BodyParser(req); err != nil {
-			c.Send("Expected 9x9 integer array")
-		} else {
-			// expectedSorted := []int{1,2,3,4,5,6,7,8,9}
+	// router.POST("/sudoku/validate", func(c *gin.Context) {
+	// 	var req [][]int
+    //     if c.BindJSON(&req) != nil{
+	// 		c.JSON(500, gin.H{
+	// 			"Error": "Expected 9x9 integer array",
+	// 		})
+	// 	} else {
+	// 		expectedSorted := []int{1,2,3,4,5,6,7,8,9}
 
-			// //row check
-			// for i := 0; i < 9; i++ {
-			// 	temp := (*req)[i]
-			// 	if temp != expectedSorted {
-			// 		return false
-			// 	}
-			// }	
+	// 		//row check
+	// 		for i := 0; i < 9; i++ {
+	// 			fmt.Print(req[0:9][i])
+	// 			if !reflect.DeepEqual(req[i],expectedSorted) {
+	// 				c.JSON(400,gin.H{
+	// 					"isSuccess": false,
+	// 				})
+	// 				return
+	// 			}
+				
+	// 			if !reflect.DeepEqual(req[i][0:8],expectedSorted){
+	// 				c.JSON(400,gin.H{
+	// 					"isSuccess": false,
+	// 				})
+	// 				return
+	// 			}
+	// 		}
+	// 	}
+	// })
 
-
-		}
-	})
-
-	app.Listen(3000)
+	router.Run(":3000")
 }

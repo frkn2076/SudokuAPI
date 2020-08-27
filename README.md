@@ -8,4 +8,16 @@ Sudoku Generator and Validator API developed by Golang and Gin Framework.
 #### POST &nbsp;&nbsp; .../sudoku/validate &nbsp;&nbsp;(SUDOKU VALIDATOR)
 
 &nbsp;
-## GENERATOR
+<h2 align="center">GENERATOR</h2>
+<p align="center">
+  <img src="https://github.com/frkn2076/SudokuAPI/blob/master/Assets/image1.PNG" width="100%" height="100%">
+</p>
+
+&nbsp;
+&nbsp;
+<h2 align="center">VALIDATOR</h2> 
+<p align="center">
+  <img src="https://github.com/frkn2076/SudokuAPI/blob/master/Assets/image1.PNG" width="100%" height="100%">
+</p>
+
+#### PS: You can edit the default port 3000.

@@ -1,10 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"math"
 	"math/rand"
-	"reflect"
+	"sort"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -19,8 +18,8 @@ func main() {
 		level, err := strconv.Atoi(param)
 		if err != nil {
 			c.JSON(500, gin.H{
-				"Error": "Send a number 1 to 10 as request",
-				"Info":  "1 -> Easiest, 10 -> Hardest",
+				"Error":   "Send a number 1 to 10 as request",
+				"Info":    "1 -> Easiest, 10 -> Hardest",
 				"Message": "Invalid format",
 			})
 		} else if level < 1 || level > 10 {
@@ -69,34 +68,81 @@ func main() {
 
 	})
 
-	// router.POST("/sudoku/validate", func(c *gin.Context) {
-	// 	var req [][]int
-    //     if c.BindJSON(&req) != nil{
-	// 		c.JSON(500, gin.H{
-	// 			"Error": "Expected 9x9 integer array",
-	// 		})
-	// 	} else {
-	// 		expectedSorted := []int{1,2,3,4,5,6,7,8,9}
+	router.POST("/sudoku/validate", func(c *gin.Context) {
+		var req [][]int
+		if c.BindJSON(&req) != nil {
+			c.JSON(500, gin.H{
+				"Error": "Expected 9x9 integer array",
+			})
+		} else {
+			expectedSorted := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
 
-	// 		//row check
-	// 		for i := 0; i < 9; i++ {
-	// 			fmt.Print(req[0:9][i])
-	// 			if !reflect.DeepEqual(req[i],expectedSorted) {
-	// 				c.JSON(400,gin.H{
-	// 					"isSuccess": false,
-	// 				})
-	// 				return
-	// 			}
-				
-	// 			if !reflect.DeepEqual(req[i][0:8],expectedSorted){
-	// 				c.JSON(400,gin.H{
-	// 					"isSuccess": false,
-	// 				})
-	// 				return
-	// 			}
-	// 		}
-	// 	}
-	// })
+			for i := 0; i < 9; i++ {
+
+				column := make([]int, 9)
+				for j := 0; j < 9; j++ {
+					column[j] = req[j][i]
+				}
+				sort.Ints(column)
+				row := make([]int, 9)
+				copy(row, req[i])
+				sort.Ints(column)
+				sort.Ints(row)
+
+				//row check
+				if !Equal(row, expectedSorted) {
+					c.JSON(400, gin.H{
+						"isSuccess": false,
+					})
+					return
+				}
+
+				//column check
+				if !Equal(column, expectedSorted) {
+					c.JSON(400, gin.H{
+						"isSuccess": false,
+					})
+					return
+				}
+
+				//3x3 square check
+				square := GetInnerSquareAsLine(req, int(math.Floor(float64(i/3))),i%3)
+				if !Equal(square, expectedSorted){
+					c.JSON(400, gin.H{
+						"isSuccess": false,
+					})
+					return
+				}
+			}
+
+			c.JSON(400, gin.H{
+				"isSuccess": true,
+			})
+		}
+	})
 
 	router.Run(":3000")
+}
+
+func Equal(a, b []int) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for index, value := range a {
+		if value != b[index] {
+			return false
+		}
+	}
+	return true
+}
+
+func GetInnerSquareAsLine(a [][]int, row int, column int) []int {
+	innerSquare := make([]int, 9)
+	for i := row*3; i < row*3+3; i++ {
+		for j := column*3; j < column*3+3; j++ {
+			innerSquare[(i%3)*3+j%3] = a[i][j]
+		}
+	}
+	sort.Ints(innerSquare)
+	return innerSquare
 }

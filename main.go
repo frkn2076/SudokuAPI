@@ -7,7 +7,6 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	// "net/http"
 )
 
 func main() {
@@ -115,7 +114,7 @@ func main() {
 				}
 			}
 
-			c.JSON(400, gin.H{
+			c.JSON(200, gin.H{
 				"isSuccess": true,
 			})
 		}

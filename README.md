@@ -10,6 +10,10 @@ Sudoku Generator and Validator API developed by Golang and Gin Framework.
 &nbsp;
 <h2 align="center">GENERATOR</h2>
 &nbsp;
+
+* You can send :level parameter 1 to 10 to decide the level of sudoku.
+* 1 -> Easiest, 10 -> Hardest
+
 <p align="center">
   <img src="https://github.com/frkn2076/SudokuAPI/blob/master/Assets/image1.PNG" width="100%" height="100%">
 </p>
@@ -18,6 +22,8 @@ Sudoku Generator and Validator API developed by Golang and Gin Framework.
 &nbsp;
 <h2 align="center">VALIDATOR</h2> 
 &nbsp;
+
+* Send completed sudoku(9x9) to see whether it is a valid sudoku.
 <p align="center">
   <img src="https://github.com/frkn2076/SudokuAPI/blob/master/Assets/image1.PNG" width="100%" height="100%">
 </p>

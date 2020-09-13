@@ -2,7 +2,6 @@ FROM golang:latest
 
 ENV GOPATH /go
 
-FROM golang:latest
 COPY ./Controllers /go/src/app/SudokuAPI/Controllers
 COPY ./Helper /go/src/app/SudokuAPI/Helper
 COPY ./Router /go/src/app/SudokuAPI/Router

@@ -29,3 +29,4 @@ Sudoku Generator and Validator API developed by Golang and Gin Framework.
 </p>
 
 #### PS: You can edit the default port 3000.
+#### PS: You can run app by exe file on Windows OS.

@@ -1,7 +1,7 @@
 package Router
 
 import (
-	"SudokuAPI/Controllers"
+	"app/SudokuAPI/Controllers"
 
 	"github.com/gin-gonic/gin"
 )

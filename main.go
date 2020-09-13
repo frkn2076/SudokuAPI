@@ -1,7 +1,7 @@
 package main
 
 import (
-	"SudokuAPI/Router"
+	"app/SudokuAPI/Router"
 )
 
 func main() {

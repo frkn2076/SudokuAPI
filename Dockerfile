@@ -1,26 +1,16 @@
-# Start from the latest golang base image
 FROM golang:latest
 
-# Add Maintainer Info
-LABEL maintainer="Furkan Öztürk <ozturkfurkan1994@hotmail.com>"
+ENV GOPATH /go
 
-# Set the Current Working Directory inside the container
-WORKDIR /app
+FROM golang:latest
+COPY ./Controllers /go/src/app/SudokuAPI/Controllers
+COPY ./Helper /go/src/app/SudokuAPI/Helper
+COPY ./Router /go/src/app/SudokuAPI/Router
+COPY ./main.go /go/src/app/SudokuAPI/main.go
 
-# Copy go mod and sum files
-COPY go.mod go.sum ./
+WORKDIR /go/src/app/SudokuAPI
 
-# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
-RUN go mod download
+RUN go get -d -v ./...
+RUN go install -v ./...
 
-# Copy the source from the current directory to the Working Directory inside the container
-COPY . .
-
-# Build the Go app
-RUN go build -o main .
-
-# Expose port 8080 to the outside world
-EXPOSE 8080
-
-# Command to run the executable
-CMD ["./main"]
+CMD ["SudokuAPI"]

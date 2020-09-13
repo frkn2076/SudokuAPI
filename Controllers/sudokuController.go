@@ -8,7 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"SudokuAPI/Helper"
+	"app/SudokuAPI/Helper"
 )
 
 
